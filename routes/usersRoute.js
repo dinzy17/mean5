@@ -1,9 +1,13 @@
 var express = require('express')
 var router = express.Router()
 var passport = require('passport')
-var mongoose = require('mongoose')
 var User = require('./../models/Users')
-var Q = require("q")
+var constants = require('./../config/constants')
+var jwt = require('express-jwt')
+var auth = jwt({
+  secret: constants.secret,
+  userProperty: 'payload'
+})
 
 const create = async (req, res) => {
 
@@ -29,7 +33,7 @@ const login = (req, res) => {
     if (err) {
       res.status(404).json(err)
     }
-login
+
     if (user) {
       var token = user.generateJwt()
       res.status(200).json({ "token" : token, user_id: user._id })
@@ -61,6 +65,6 @@ router.post("/register", create)
 router.post("/login", login)
 router.post("/update/:id", update)
 router.get("/list", list)
-router.get(["/view/:id", "/:id", "/profile/:id"], details)
+router.get(["/view/:id", "/:id", "/profile/:id"], auth, details)
 
 module.exports = router
