@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthenticationService, TokenPayload } from '../authentication.service';
+import { AuthenticationService, TokenPayload } from '../../authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,6 +18,6 @@ export class LoginComponent {
       this.router.navigateByUrl('/profile');
     }, (err) => {
       console.error(err);
-    }); 
+    });
   }
 }

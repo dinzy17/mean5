@@ -113,4 +113,8 @@ export class AuthenticationService {
     window.localStorage.removeItem('user_id')
     this.router.navigateByUrl('/');
   }
+
+  public userList(): Observable<any> {
+    return this.request('get', 'users/list/')
+  }
 }

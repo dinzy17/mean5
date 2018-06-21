@@ -48,7 +48,13 @@ const update = async (req, res) => {
 }
 
 const list = async (req, res) => {
-    res.send(await usersController.list({ sort: { created_on: -1 }}))
+    User.find({},{ email: 1, name: 1}, (err, userList) => {
+      if (err) {
+        res.status(401).send(err)
+      } else {
+        res.send(userList)
+      }
+    })
 }
 
 const details = (req, res) => {
