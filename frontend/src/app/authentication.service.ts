@@ -14,6 +14,7 @@ export interface UserDetails {
 
 interface TokenResponse {
   token: string;
+  user_id: string;
 }
 
 export interface TokenPayload {
@@ -24,26 +25,37 @@ export interface TokenPayload {
 
 @Injectable()
 export class AuthenticationService {
-  private token: string;
+  private token: string
+  private user_id: string
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  private saveToken(token: string): void {
-    localStorage.setItem('mean-token', token);
-    this.token = token;
+  private saveToken(token: string, user_id: string): void {
+    localStorage.setItem('token', token)
+    localStorage.setItem('user_id', user_id)
+    this.token = token
+    this.user_id = user_id
   }
 
   private getToken(): string {
     if (!this.token) {
-      this.token = localStorage.getItem('mean-token');
+      this.token = localStorage.getItem('token')
     }
     return this.token;
   }
 
+  private getUser(): string {
+    if (!this.user_id) {
+      this.user_id = localStorage.getItem('user_id')
+    }
+    return this.user_id;
+  }
+
   public getUserDetails(): UserDetails {
-    const token = this.getToken();
+    const token = this.getToken()
+    const user_id = this.getUser()
     let payload;
-    if (token) {
+    if (token && user_id) {
       payload = token.split('.')[1];
       payload = window.atob(payload);
       return JSON.parse(payload);
@@ -61,7 +73,7 @@ export class AuthenticationService {
     }
   }
 
-  private request(method: 'post'|'get', type: 'login'|'register'|'profile', user?: TokenPayload): Observable<any> {
+  private request(method: 'post'|'get', type: string, user?: TokenPayload): Observable<any> {
     let base;
 
     if (method === 'post') {
@@ -73,7 +85,7 @@ export class AuthenticationService {
     const request = base.pipe(
       map((data: TokenResponse) => {
         if (data.token) {
-          this.saveToken(data.token);
+          this.saveToken(data.token, data.user_id)
         }
         return data;
       })
@@ -83,20 +95,22 @@ export class AuthenticationService {
   }
 
   public register(user: TokenPayload): Observable<any> {
-    return this.request('post', 'register', user);
+    return this.request('post', 'users/register', user);
   }
 
   public login(user: TokenPayload): Observable<any> {
-    return this.request('post', 'login', user);
+    return this.request('post', 'users/login', user);
   }
 
   public profile(): Observable<any> {
-    return this.request('get', 'profile');
+    let user_id = localStorage.getItem("user_id")
+    return this.request('get', 'users/profile/' + user_id )
   }
 
   public logout(): void {
     this.token = '';
-    window.localStorage.removeItem('mean-token');
+    window.localStorage.removeItem('token')
+    window.localStorage.removeItem('user_id')
     this.router.navigateByUrl('/');
   }
 }

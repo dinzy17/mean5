@@ -5,11 +5,11 @@ var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var cors = require('cors')
-var routesApi = require('./api/routes/index')
+var routesApi = require('./routes')
 
 var passport = require('passport')
-const mongooseConnect = require('./api/models/db');
-require('./api/config/passport');
+const mongooseConnect = require('./helpers/database')
+require('./helpers/passport')
 
 mongooseConnect.dbConnect()
 
