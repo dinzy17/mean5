@@ -4,12 +4,24 @@ var jwt = require('jsonwebtoken')
 var constants = require("./../config/constants")
 
 var userSchema = new mongoose.Schema({
-  email: {
+  email_id: {
     type: String,
     unique: true,
     required: true
   },
-  name: {
+  user_type: {
+    type: String,
+    required: true
+  },
+  first_name: {
+    type: String,
+    required: true
+  },
+  last_name: {
+    type: String,
+    required: true
+  },
+  contact_number: {
     type: String,
     required: true
   },
@@ -34,7 +46,7 @@ userSchema.methods.generateJwt = () => {
 
   return jwt.sign({
     _id: this._id,
-    email: this.email,
+    email_id: this.email_id,
     name: this.name,
     exp: parseInt(expiry.getTime() / 1000),
   }, constants.secret)

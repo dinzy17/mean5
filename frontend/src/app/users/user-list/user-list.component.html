@@ -3,80 +3,39 @@
        <div class="user-management-data">
 		    <h3> User Management</h3>
 		    <p class="summary text-right">Displaying 10 of 10 records</p>
+        <div class="search-container pull-right col-lg-4 col-md-6 col-sm-8">
+            <input [(ngModel)]="search" class="form-control search-input" />
+            <button class="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
         <table class="items table table-striped ">
 			    <tr>
 		        <th>#</th>
-  					<th>Email <a class="sort-icon"></a></th>
-  					<th>Name <a class="sort-icon"></a></th>
-				    <th class="action" style="width:5%">Action</th>
+            <th>First Name <a class="sort-icon"></a></th>
+            <th>Last Name <a class="sort-icon"></a></th>
+            <th>Email <a class="sort-icon"></a></th>
+            <th>Contact Number <a class="sort-icon"></a></th>
+  					<th class="action" style="width:5%">Action</th>
 			    </tr>
           <tr>
-			      <td></td>
+			      <!-- <td></td>
   					<td><input [(ngModel)]="search" /> <button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
-		        <td><input [(ngModel)]="search.name" /><button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
-		        <td class="clear"><button class="clear" >Clear</button></td>
+		        <td><input [(ngModel)]="search" /><button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
+            <td><input [(ngModel)]="search" /><button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
+            <td><input [(ngModel)]="search" /><button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
+		        <td class="clear"><button class="clear" >Clear</button></td> -->
 			    </tr>
           <tr *ngFor="let user of userList | filter: search; let i = index" >
 			    	<td>{{i + 1}}</td>
-		        <td>{{user.email}}</td>
-		        <td>{{user.name}}</td>
+		        <td>{{user.first_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.email_id}}</td>
+		        <td>{{user.contact_number}}</td>
 		        <td class="view">
-	            <a routerLink="#/users/update/{{ user._id}}" title="Update"><i class="fa fa-edit" aria-hidden="true"></i></a>
-              <a routerLink="#/users/view/{{ user._id}}" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+	            <a routerLink="./../userUpdate/{{ user._id}}" title="Update"><i class="fa fa-edit" aria-hidden="true"></i></a>
+              <a routerLink="./../userView/{{ user._id}}" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
 		        </td>
 			    </tr>
         </table>
-		    <!-- <table class="items table table-striped ">
-			    <tr>
-			        <th>#</th>
-					<th style="width:10%">User type   <a class="sort-icon" ng-click="sort_by('user_type');"></a></th>
-					<th style="width:15%">Email  <a class="sort-icon" ng-click="sort_by('email_id');"></a></th>
-					<th style="width:10%">First Name  <a class="sort-icon" ng-click="sort_by('first_name');"></a></th>
-			        <th style="width:10%">Last Name  <a class="sort-icon" ng-click="sort_by('last_name');"></a></th>
-			        <th style="width:10%">Status <a class="sort-icon" ng-click="sort_by('status');"></a></th>
-					<th style="width:10%">Created date  <a class="sort-icon" ng-click="sort_by('created_on');"></a></th>
-			        <th class="action" style="width:5%">Action</th>
-			    </tr>
-
-			    <tr>
-			        <td></td>
-					<td>
-			            <select ng-model="search.user_type" class="form-control">
-			                <option value="" >All</option>
-			                <option value="Hospital">Hospital</option>
-			                <option value="Surgeon">Surgeon</option>
-			                <option value="Nurse">Nurse</option>
-			            </select>
-					</td>
-					<td><input ng-model="search.email_id"  /> <button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
-			        <td><input ng-model="search.first_name"  /><button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
-			        <td><input ng-model="search.last_name"  /><button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
-			         <td style="padding-right: 10px;">
-			            <select ng-model="search.status" class="form-control" ng-change="search.status==''?resetFilters():search.status">
-			                <option value="" >All</option>
-			                <option value="Active">Active</option>
-			                <option value="Inactive">Inactive</option>
-			            </select>
-			        </td>
-					<td><input ng-model="search.created_on"  /><button class="search"><i class="fa fa-search" aria-hidden="true"></i></button></td>
-			        <td class="clear"><button class="clear" ng-click="resetFilters()">Clear</button></td>
-			    </tr>
-
-			    <tr ng-repeat="user in filtered = (list | filter:search | filter:{'status':search.status}:true | orderBy : predicate :reverse) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
-			    	<td>{{(entryLimit*currentPage-10)+($index+1)}}</td>
-			        <td>{{user.user_type}}</td>
-					<td>{{user.email_id}}</td>
-			        <td>{{user.first_name}}</td>
-			        <td>{{user.last_name}}</td>
-			        <td><a ng-click="vm.toggleActive(user)" style="cursor:pointer" id="user_status_{{user._id}}" class='status_link {{user.status == "Active"?"status-active":"status-inactive"}}' > {{user.status}} </a> </td>
-					<td>{{user.created_on | date:'yyyy-MM-dd hh:mm a'}}</td>
-			        <td class="view">
-			            <a href="#" ng-href="#/users/view/{{ user._id}}" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
-			        </td>
-			    </tr>
-		    </table>
-		    <div ng-if="filtered.length == 0"  class="well"><center><b>No record found</b></center></div>
-		    <pagination page="currentPage" max-size="noOfPages" total-items="totalItems" items-per-page="entryLimit"></pagination>
-       </div> -->
     </div>
+  </div>
 </div>

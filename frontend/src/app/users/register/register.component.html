@@ -6,12 +6,12 @@
       <p class="lead">Already a member? Please <a routerLink="/login">log in</a> instead.</p>
       <form (submit)="register()">
         <div class="form-group">
-          <label for="name">Full name</label>
+          <label for="name">First name</label>
           <input type="text" class="form-control" name="name" placeholder="Enter your name" [(ngModel)]="credentials.name">
         </div>
         <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" class="form-control" name="email" placeholder="Enter email" [(ngModel)]="credentials.email">
+          <label for="email_id">Email address</label>
+          <input type="email_id" class="form-control" name="email_id" placeholder="Enter email" [(ngModel)]="credentials.email_id">
         </div>
         <div class="form-group">
           <label for="password">Password</label>

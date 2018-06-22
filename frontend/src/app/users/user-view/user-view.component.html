@@ -1,0 +1,36 @@
+
+<div class=" col-lg-8 grid-view"  >
+    <h3> View User</h3>
+    <ul class="breadcrumb breadcrumb-page">
+        <div class="breadcrumb-label text-light-gray">You are here: </div>
+            <div class="breadcrumbs">
+                <a routerLink="/userList">User Management</a> » <span>View</span>
+            </div><!-- breadcrumbs -->
+    </ul>
+
+    <div class="col-lg-12" >
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>User Type</th>
+                <td>{{userDetails.user_type}}</td>
+            </tr>
+            <tr>
+                <th>First Name</th>
+                <td>{{userDetails.first_name}}</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>{{userDetails.last_name}}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{userDetails.email_id}}</td>
+            </tr>
+            <tr>
+                <th>Contact Number</th>
+                <td>{{userDetails.contact_number}}</td>
+            </tr>
+
+        </table>
+    </div>
+</div>

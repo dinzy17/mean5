@@ -13,7 +13,7 @@ const create = async (req, res) => {
 
   var user = new User()
   user.name = req.body.name
-  user.email = req.body.email
+  user.email_id = req.body.email_id
   let userSecurityDetails = user.setPassword(req.body.password)
   user.salt = userSecurityDetails.salt
   user.hash = userSecurityDetails.hash
@@ -44,17 +44,36 @@ const login = (req, res) => {
 }
 
 const update = async (req, res) => {
-    res.send(await usersController.update(req.params.id, req.body))
+
+  User.update({ _id: req.body._id},{ $set: req.body} ,(err, updatedUser)=>{
+    if (err) {
+      res.status(401).send(err)
+    } else {
+      res.send(updatedUser)
+    }
+  })
 }
 
 const list = async (req, res) => {
-    User.find({},{ email: 1, name: 1}, (err, userList) => {
-      if (err) {
-        res.status(401).send(err)
-      } else {
-        res.send(userList)
-      }
-    })
+  const { fields, offset, query, order } = req.body
+  User.find({}, fields, (err, userList) => {
+    if (err) {
+      res.status(401).send(err)
+    } else {
+      res.send(userList)
+    }
+  }).sort(order).skip(offset)
+}
+
+const view = (req, res) => {
+  const { query, fields } = req.body
+  User.findOne(query, fields ,(err, user) => {
+    if (err) {
+      res.status(401).send(err)
+    } else {
+      res.send(user)
+    }
+  })
 }
 
 const details = (req, res) => {
@@ -69,8 +88,9 @@ const details = (req, res) => {
 
 router.post("/register", create)
 router.post("/login", login)
-router.post("/update/:id", update)
-router.get("/list", list)
+router.post("/update", update)
+router.post("/list", list)
+router.post("/view", view)
 router.get(["/view/:id", "/:id", "/profile/:id"], auth, details)
 
 module.exports = router

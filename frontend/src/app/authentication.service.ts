@@ -1,26 +1,27 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators/map';
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs/Observable'
+import { map } from 'rxjs/operators/map'
+import { Router } from '@angular/router'
 
 export interface UserDetails {
-  _id: string;
-  email: string;
-  name: string;
-  exp: number;
-  iat: number;
+  _id: string
+  email_id: string
+  first_name: string
+  last_name: string
+  exp: number
+  iat: number
 }
 
 interface TokenResponse {
-  token: string;
-  user_id: string;
+  token: string
+  user_id: string
 }
 
 export interface TokenPayload {
-  email: string;
-  password: string;
-  name?: string;
+  email_id: string
+  password: string
+  name?: string
 }
 
 @Injectable()
@@ -41,45 +42,45 @@ export class AuthenticationService {
     if (!this.token) {
       this.token = localStorage.getItem('token')
     }
-    return this.token;
+    return this.token
   }
 
   private getUser(): string {
     if (!this.user_id) {
       this.user_id = localStorage.getItem('user_id')
     }
-    return this.user_id;
+    return this.user_id
   }
 
   public getUserDetails(): UserDetails {
     const token = this.getToken()
     const user_id = this.getUser()
-    let payload;
+    let payload
     if (token && user_id) {
-      payload = token.split('.')[1];
-      payload = window.atob(payload);
-      return JSON.parse(payload);
+      payload = token.split('.')[1]
+      payload = window.atob(payload)
+      return JSON.parse(payload)
     } else {
-      return null;
+      return null
     }
   }
 
   public isLoggedIn(): boolean {
-    const user = this.getUserDetails();
+    const user = this.getUserDetails()
     if (user) {
-      return user.exp > Date.now() / 1000;
+      return user.exp > Date.now() / 1000
     } else {
-      return false;
+      return false
     }
   }
 
   private request(method: 'post'|'get', type: string, user?: TokenPayload): Observable<any> {
-    let base;
+    let base
 
     if (method === 'post') {
-      base = this.http.post(`/api/${type}`, user);
+      base = this.http.post(`/api/${type}`, user)
     } else {
-      base = this.http.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
+      base = this.http.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }})
     }
 
     const request = base.pipe(
@@ -87,19 +88,19 @@ export class AuthenticationService {
         if (data.token) {
           this.saveToken(data.token, data.user_id)
         }
-        return data;
+        return data
       })
-    );
+    )
 
-    return request;
+    return request
   }
 
   public register(user: TokenPayload): Observable<any> {
-    return this.request('post', 'users/register', user);
+    return this.request('post', 'users/register', user)
   }
 
   public login(user: TokenPayload): Observable<any> {
-    return this.request('post', 'users/login', user);
+    return this.request('post', 'users/login', user)
   }
 
   public profile(): Observable<any> {
@@ -108,13 +109,22 @@ export class AuthenticationService {
   }
 
   public logout(): void {
-    this.token = '';
+    this.token = ''
     window.localStorage.removeItem('token')
     window.localStorage.removeItem('user_id')
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/login')
   }
 
-  public userList(): Observable<any> {
-    return this.request('get', 'users/list/')
+  public userList(req_vars: any): Observable<any> {
+    return this.request('post', 'users/list', req_vars)
   }
+
+  public userView(req_vars: any): Observable<any> {
+    return this.request('post', 'users/view', req_vars)
+  }
+
+  public userUpdate(req_vars: any): Observable<any> {
+    return this.request('post', 'users/update', req_vars)
+  }
+
 }

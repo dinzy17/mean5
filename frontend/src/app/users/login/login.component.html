@@ -1,16 +1,16 @@
 <div class="container">
 
   <div class="row">
-    
+
     <div class="col-md-6">
 
       <h1 class="form-signin-heading">Sign in</h1>
       <p class="lead">Not a member? Please <a routerLink="/register">register</a> instead.</p>
-  
+
       <form (submit)="login()">
         <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" class="form-control" name="email" placeholder="Enter email" [(ngModel)]="credentials.email">
+          <label for="email_id">Email address</label>
+          <input type="email_id" class="form-control" name="email_id" placeholder="Enter email" [(ngModel)]="credentials.email_id">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
