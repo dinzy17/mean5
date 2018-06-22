@@ -9,6 +9,7 @@ var auth = jwt({
   userProperty: 'payload'
 })
 
+//function to create/register new user
 const create = async (req, res) => {
 
   var user = new User()
@@ -27,6 +28,7 @@ const create = async (req, res) => {
   })
 }
 
+//function to check login of user
 const login = (req, res) => {
   passport.authenticate('local', (err, user, info) => {
 
@@ -43,6 +45,7 @@ const login = (req, res) => {
   })(req, res)
 }
 
+//function to update user
 const update = async (req, res) => {
 
   User.update({ _id: req.body._id},{ $set: req.body} ,(err, updatedUser)=>{
@@ -54,6 +57,7 @@ const update = async (req, res) => {
   })
 }
 
+//function to get user list
 const list = async (req, res) => {
   const { fields, offset, query, order } = req.body
   User.find({}, fields, (err, userList) => {
@@ -65,6 +69,7 @@ const list = async (req, res) => {
   }).sort(order).skip(offset)
 }
 
+// function to get details of user
 const view = (req, res) => {
   const { query, fields } = req.body
   User.findOne(query, fields ,(err, user) => {
@@ -76,6 +81,7 @@ const view = (req, res) => {
   })
 }
 
+// function to get details of current user
 const details = (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err) {

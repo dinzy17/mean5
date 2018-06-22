@@ -26,12 +26,12 @@ export class UserUpdateComponent implements OnInit {
       console.error(err)
     })
   }
+  //funciton to update user details
   updateUser = () => {
     const req_vars = this.userDetails
     this.auth.userUpdate(req_vars).subscribe(userDetails => {
-
       console.log("User has been Updated")
-      //this.router.navigate(['/userList'])
+      this.router.navigate(['/userList'])
     }, (err) => {
       console.error(err)
     })
